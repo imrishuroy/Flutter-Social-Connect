@@ -11,11 +11,14 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
+  // List<dynamic> users = [];
+
   @override
   void initState() {
-    getUser();
+    // getUser();
     super.initState();
   }
+  /*
 
   // get all data
   // void getUser() {
@@ -29,17 +32,20 @@ class _TimelineState extends State<Timeline> {
   // }
 
   void getUser() async {
-    final QuerySnapshot snapshot = await usersRef
-        // .where('postCount', isGreaterThan: 3)
-        // .where('username', isEqualTo: 'Rishu')
-        .limit(1)
-        //.orderBy('postsCount', descending: true)
-        .get();
-    snapshot.docs.forEach((DocumentSnapshot doc) {
-      print(doc.data());
-      print(doc.exists);
-      print(doc.id);
+    final QuerySnapshot snapshot = await usersRef.get();
+    // .where('postCount', isGreaterThan: 3)
+    // .where('username', isEqualTo: 'Rishu')
+    // .limit(1)
+    //.orderBy('postsCount', descending: true)
+    // .get();
+    setState(() {
+      users = snapshot.docs;
     });
+    // snapshot.docs.forEach((DocumentSnapshot doc) {
+    //   print(doc.data());
+    //   print(doc.exists);
+    //   print(doc.id);
+    // });
   }
 
   // gettting specific data according to id
@@ -59,11 +65,35 @@ class _TimelineState extends State<Timeline> {
     print(doc.exists);
     print(doc.id);
   }
+  */
 
   @override
   Widget build(context) {
     return Scaffold(
-        appBar: header(context: context, title: 'TimeLine'),
-        body: Text('Time Liner'));
+      appBar: header(context: context, title: 'TimeLine'),
+      // body: FutureBuilder<QuerySnapshot>(
+      body: StreamBuilder<QuerySnapshot>(
+        // future: usersRef.get(),
+        stream: usersRef.snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return circularProgress();
+          }
+          final List<Text> childern =
+              snapshot.data.docs.map((doc) => Text(doc['username'])).toList();
+          return Container(
+            child: ListView(
+              children: childern,
+            ),
+          );
+        },
+      ),
+    );
   }
 }
+
+// Container(
+//         child: ListView(
+//           children: users.map((user) => Text(user['username'])).toList(),
+//         ),
+//       ),
