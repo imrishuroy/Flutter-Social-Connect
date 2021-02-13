@@ -12,6 +12,7 @@ Widget circularProgress() {
   );
 }
 
+// show liner progress indicator on the top
 Widget linearProgress() {
   return Container(
     padding: EdgeInsets.only(bottom: 10.0),
