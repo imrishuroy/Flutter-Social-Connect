@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "681956443355",
+    "project_id": "flutter-social-connect",
+    "storage_bucket": "flutter-social-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681956443355:android:940a978f222cffe25738fe",
+        "android_client_info": {
+          "package_name": "com.sixteenbrains.social_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681956443355-le79bhprvutu6o21ctv2o93p489258sv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sixteenbrains.social_connect",
+            "certificate_hash": "7e2ec03fadce10cead6a22daf75e6aeb1d7357ef"
+          }
+        },
+        {
+          "client_id": "681956443355-qnfn0p2k6pbn7c0ore7ngnq571vqp491.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADHOKG91vywM4c_6gBpH-d-LuLNTNiZXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681956443355-qnfn0p2k6pbn7c0ore7ngnq571vqp491.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
