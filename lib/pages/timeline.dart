@@ -16,8 +16,55 @@ class _TimelineState extends State<Timeline> {
   @override
   void initState() {
     // getUser();
+    createUser();
+    updateUser();
+    //deleteUser();
     super.initState();
   }
+  ////################### CRUD OPERATION ON FIREBASE #################////////
+
+// add data by creating its own unique id
+  // createUser() async{
+  //  await usersRef.add({
+  //     'username':'Ram',
+  //     'postsCount':5,
+  //     'isAdmin':true,
+  //   });
+  // }
+  // create new user
+  createUser() {
+    usersRef.doc('kcbcbjkbkbk').set({
+      'username': 'New User',
+      'postsCount': 1,
+      'isAdmin': true,
+    });
+  }
+
+// update old data
+  updateUser() async {
+    final doc = await usersRef.doc('kcbcbbvjkbkbk').get();
+    if (doc.exists) {
+      doc.reference.update({
+        'username': 'Shree Ram',
+        'postsCount': 5,
+        'isAdmin': true,
+      });
+    }
+    // usersRef.doc('kcbcbbvj').update({
+    //   'username': 'Shree Ram',
+    //   'postsCount': 5,
+    //   'isAdmin': true,
+    // });
+  }
+
+  deleteUser() async {
+    final doc = await usersRef.doc('kcbcbjkbkbk').get();
+    if (doc.exists) {
+      doc.reference.delete();
+    }
+    // usersRef.doc('H9oNTLEVob5HKLPfy954').delete();
+  }
+
   /*
 
   // get all data
