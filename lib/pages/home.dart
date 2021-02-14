@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_connect/pages/activity_feed.dart';
+import 'package:social_connect/pages/create_account.dart';
 import 'package:social_connect/pages/profile.dart';
 import 'package:social_connect/pages/search.dart';
 import 'package:social_connect/pages/timeline.dart';
 import 'package:social_connect/pages/upload.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
+final usersRef = FirebaseFirestore.instance.collection('users');
+final DateTime timeStamp = DateTime.now();
 
 class Home extends StatefulWidget {
   @override
@@ -42,6 +46,7 @@ class _HomeState extends State<Home> {
   handleSignIn(GoogleSignInAccount account) {
     if (account != null) {
       print('$account');
+      createUserInFirestore();
       setState(() {
         isAuth = true;
       });
@@ -51,6 +56,35 @@ class _HomeState extends State<Home> {
           isAuth = false;
         },
       );
+    }
+  }
+
+  //########### Adding User Data in Firestore ##############//
+
+  createUserInFirestore() async {
+    /*
+    1. check if user exist in users collection in database according to their id
+    2. if user doesnot exist, then we want to take them to the create acccount page
+    3. get username from create account, use it to make new users document in users collection 
+    */
+    final GoogleSignInAccount user = googleSignIn.currentUser;
+    final DocumentSnapshot doc = await usersRef.doc(user.id).get();
+    if (!doc.exists) {
+      final username = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateAccount(),
+        ),
+      );
+      usersRef.doc(user.id).set({
+        'id': user.id,
+        'username': username,
+        'photoUrl': user.photoUrl,
+        'displayName': user.displayName,
+        'email': user.email,
+        'bio': '',
+        'timeStamp': timeStamp,
+      });
     }
   }
 
@@ -87,7 +121,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: PageView(
         children: [
-          Timeline(),
+          // Timeline(),
+          RaisedButton(
+            onPressed: logout,
+            child: Text('Authenticated'),
+          ),
           ActivityFeed(),
           Upload(),
           Search(),
