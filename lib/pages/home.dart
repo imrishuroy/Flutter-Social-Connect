@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
     // creating our own app user class and instantiating via factory constrctor
     currentUser = AppUser.fromDocument(doc);
     print(currentUser);
-    print(currentUser.photoUrl);
+    print(currentUser.username);
   }
 
   login() async {
