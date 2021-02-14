@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:social_connect/models/user.dart';
 import 'package:social_connect/pages/activity_feed.dart';
 import 'package:social_connect/pages/create_account.dart';
 import 'package:social_connect/pages/profile.dart';
@@ -12,6 +13,7 @@ import 'package:social_connect/pages/upload.dart';
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final usersRef = FirebaseFirestore.instance.collection('users');
 final DateTime timeStamp = DateTime.now();
+AppUser currentUser;
 
 class Home extends StatefulWidget {
   @override
@@ -68,7 +70,7 @@ class _HomeState extends State<Home> {
     3. get username from create account, use it to make new users document in users collection 
     */
     final GoogleSignInAccount user = googleSignIn.currentUser;
-    final DocumentSnapshot doc = await usersRef.doc(user.id).get();
+    DocumentSnapshot doc = await usersRef.doc(user.id).get();
     if (!doc.exists) {
       final username = await Navigator.push(
         context,
@@ -85,7 +87,13 @@ class _HomeState extends State<Home> {
         'bio': '',
         'timeStamp': timeStamp,
       });
+      // getting the updated document of current user
+      doc = await usersRef.doc(user.id).get();
     }
+    // creating our own app user class and instantiating via factory constrctor
+    currentUser = AppUser.fromDocument(doc);
+    print(currentUser);
+    print(currentUser.photoUrl);
   }
 
   login() async {
