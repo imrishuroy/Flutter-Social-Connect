@@ -40,9 +40,11 @@ class _HomeState extends State<Home> {
     //Reauthenticate user when app is opened
     googleSignIn.signInSilently(suppressErrors: false).then((account) {
       handleSignIn(account);
-    }).catchError((error) {
-      print('Error Signing in $error');
-    });
+    }).catchError(
+      (error) {
+        print('Error Signing in $error');
+      },
+    );
   }
 
   handleSignIn(GoogleSignInAccount account) {
@@ -135,7 +137,7 @@ class _HomeState extends State<Home> {
             child: Text('Authenticated'),
           ),
           ActivityFeed(),
-          Upload(),
+          Upload(currentUser: currentUser),
           Search(),
           Profile(),
         ],
