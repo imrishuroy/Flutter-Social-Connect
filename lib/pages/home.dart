@@ -12,6 +12,7 @@ import 'package:social_connect/pages/upload.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final usersRef = FirebaseFirestore.instance.collection('users');
+final postsRef = FirebaseFirestore.instance.collection('posts');
 final DateTime timeStamp = DateTime.now();
 AppUser currentUser;
 
