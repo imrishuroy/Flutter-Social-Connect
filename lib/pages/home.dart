@@ -7,7 +7,7 @@ import 'package:social_connect/pages/activity_feed.dart';
 import 'package:social_connect/pages/create_account.dart';
 import 'package:social_connect/pages/profile.dart';
 import 'package:social_connect/pages/search.dart';
-import 'package:social_connect/pages/timeline.dart';
+
 import 'package:social_connect/pages/upload.dart';
 
 final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -140,7 +140,7 @@ class _HomeState extends State<Home> {
           ActivityFeed(),
           Upload(currentUser: currentUser),
           Search(),
-          Profile(),
+          Profile(profileId: currentUser?.id),
         ],
         controller: pageController,
         onPageChanged: onPageChanged,
