@@ -212,7 +212,7 @@ class _UploadState extends State<Upload> {
     });
   }
 
-// by using geolocator package
+// getting location by using geolocator package
   getUserLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -224,6 +224,7 @@ class _UploadState extends State<Upload> {
     print(completeAddress);
     String formattedAddress = "${placemark.locality}, ${placemark.country}";
     locationController.text = formattedAddress;
+    print(completeAddress);
   }
 
   Widget buildUploadForm() {
@@ -322,7 +323,7 @@ class _UploadState extends State<Upload> {
             alignment: Alignment.center,
             child: RaisedButton.icon(
               color: Colors.blue,
-              onPressed: getUserLocation,
+              onPressed: () => getUserLocation(),
               icon: Icon(
                 Icons.my_location,
                 color: Colors.white,
