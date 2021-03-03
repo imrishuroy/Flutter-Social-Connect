@@ -18,7 +18,9 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController bioController = TextEditingController();
   bool isLoading = false;
   AppUser user;
-
+  bool _displayNameValid = true;
+  bool _bioValid = true;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -39,6 +41,28 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
+  updateProfileData() {
+    setState(() {
+      displayNameController.text.trim().length < 3 ||
+              displayNameController.text.isEmpty
+          ? _displayNameValid = false
+          : _displayNameValid = true;
+
+      bioController.text.trim().length > 100
+          ? _bioValid = false
+          : _bioValid = true;
+    });
+
+    if (_displayNameValid && _bioValid) {
+      usersRef.doc(widget.currentUserId).update({
+        'displayName': displayNameController.text,
+        'bio': bioController.text,
+      });
+      SnackBar snackbar = SnackBar(content: Text('Profile Updated'));
+      _scaffoldKey.currentState.showSnackBar(snackbar);
+    }
+  }
+
   Column buildDisplayNameField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,10 +79,20 @@ class _EditProfileState extends State<EditProfile> {
         TextField(
           controller: displayNameController,
           decoration: InputDecoration(
-            hintText: 'Update display name',
-          ),
+              hintText: 'Update display name',
+              errorText: _displayNameValid ? null : 'Display name too short'),
         )
       ],
+    );
+  }
+
+  logout() async {
+    await googleSignIn.signOut();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
     );
   }
 
@@ -78,8 +112,8 @@ class _EditProfileState extends State<EditProfile> {
         TextField(
           controller: bioController,
           decoration: InputDecoration(
-            hintText: 'Update Bio',
-          ),
+              hintText: 'Update Bio',
+              errorText: _bioValid ? null : 'Bio too long'),
         )
       ],
     );
@@ -88,6 +122,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -137,7 +172,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: updateProfileData,
                         child: Text(
                           'Update Profile',
                           style: TextStyle(
@@ -149,18 +184,19 @@ class _EditProfileState extends State<EditProfile> {
                       Padding(
                         padding: EdgeInsets.all(16.0),
                         child: FlatButton.icon(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.cancel,
+                          onPressed: logout,
+                          icon: Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                          label: Text(
+                            'Logout',
+                            style: TextStyle(
                               color: Colors.red,
+                              fontSize: 18.0,
                             ),
-                            label: Text(
-                              'Logout',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 18.0,
-                              ),
-                            )),
+                          ),
+                        ),
                       )
                     ],
                   ),
