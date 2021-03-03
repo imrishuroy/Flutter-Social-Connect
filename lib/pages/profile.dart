@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:social_connect/models/app_user.dart';
 import 'package:social_connect/pages/edit_profile.dart';
 import 'package:social_connect/pages/home.dart';
 import 'package:social_connect/widgets/header.dart';
+import 'package:social_connect/widgets/post.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -16,8 +18,32 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final String currentUserId = currentUser?.id;
+  bool isLoading = false;
+  int postCount = 0;
+  List<Post> posts = [];
+  @override
+  void initState() {
+    super.initState();
+    getProfilePost();
+  }
 
-  buildCountColumn(String label, int count) {
+  getProfilePost() async {
+    setState(() {
+      isLoading = true;
+    });
+    QuerySnapshot snapshot = await postsRef
+        .doc(widget.profileId)
+        .collection('usersPosts')
+        .orderBy('timestamp', descending: true)
+        .get();
+    setState(() {
+      isLoading = false;
+      postCount = snapshot.docs.length;
+      posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+    });
+  }
+
+  Column buildCountColumn(String label, int count) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,11 +95,12 @@ class _ProfileState extends State<Profile> {
           ),
           alignment: Alignment.center,
           decoration: BoxDecoration(
+            color: Colors.blue,
+            border: Border.all(
               color: Colors.blue,
-              border: Border.all(
-                color: Colors.blue,
-              ),
-              borderRadius: BorderRadius.circular(5.0)),
+            ),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
         ),
       ),
     );
@@ -100,9 +127,7 @@ class _ProfileState extends State<Profile> {
         }
         AppUser user = AppUser.fromDocument(snapshot.data);
         return Padding(
-          padding: EdgeInsets.all(
-            16.0,
-          ),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             children: [
               Row(
@@ -122,7 +147,7 @@ class _ProfileState extends State<Profile> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            buildCountColumn('posts', 0),
+                            buildCountColumn('posts', postCount),
                             buildCountColumn('followers', 0),
                             buildCountColumn('following', 0),
                           ],
@@ -174,6 +199,15 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  buidProfilePosts() {
+    if (isLoading) {
+      return CircularProgressIndicator();
+    }
+    return Column(
+      children: posts,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,6 +218,10 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: [
           buildProfileHeader(),
+          Divider(
+            height: 0.0,
+          ),
+          buidProfilePosts(),
         ],
       ),
     );
