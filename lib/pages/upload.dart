@@ -5,13 +5,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:social_connect/models/user.dart';
+import 'package:social_connect/models/app_user.dart';
 import 'package:social_connect/pages/home.dart';
 import 'package:social_connect/widgets/progress.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:geocoding/geocoding.dart';
 
 class Upload extends StatefulWidget {
@@ -32,6 +32,7 @@ class _UploadState extends State<Upload> {
   TextEditingController locationController = TextEditingController();
   TextEditingController captionController = TextEditingController();
 
+  // by using image_picker package
   handelTakePhoto() async {
     Navigator.of(context).pop();
     final pickedImage = await picker.getImage(

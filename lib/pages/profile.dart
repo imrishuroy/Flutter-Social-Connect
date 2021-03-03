@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:social_connect/models/user.dart';
+import 'package:social_connect/models/app_user.dart';
+import 'package:social_connect/pages/edit_profile.dart';
 import 'package:social_connect/pages/home.dart';
 import 'package:social_connect/widgets/header.dart';
 
@@ -14,6 +15,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final String currentUserId = currentUser?.id;
+
   buildCountColumn(String label, int count) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -27,9 +30,7 @@ class _ProfileState extends State<Profile> {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(
-            top: 4.0,
-          ),
+          margin: EdgeInsets.only(top: 4.0),
           child: Text(
             label,
             style: TextStyle(
@@ -43,8 +44,51 @@ class _ProfileState extends State<Profile> {
     );
   }
 
+  editProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfile(currentUserId: currentUserId),
+      ),
+    );
+  }
+
+  Container buildButton({String text, Function function}) {
+    return Container(
+      child: FlatButton(
+        onPressed: function,
+        child: Container(
+          width: 200.0,
+          height: 28.0,
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Colors.blue,
+              border: Border.all(
+                color: Colors.blue,
+              ),
+              borderRadius: BorderRadius.circular(5.0)),
+        ),
+      ),
+    );
+  }
+
   buildProfileButton() {
-    return Text('Profile Button');
+    // when viewing our own profile we should show edit profile button
+    bool isProfileOwner = currentUserId == widget.profileId;
+    if (isProfileOwner) {
+      // display edit profile button
+      return buildButton(
+        text: 'Edit Profile',
+        function: editProfile,
+      );
+    }
   }
 
   Widget buildProfileHeader() {
@@ -75,20 +119,21 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisSize: MainAxisSize.min,
+                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             buildCountColumn('posts', 0),
                             buildCountColumn('followers', 0),
                             buildCountColumn('following', 0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                buildProfileButton(),
-                              ],
-                            )
                           ],
-                        )
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildProfileButton(),
+                          ],
+                        ),
                       ],
                     ),
                   )

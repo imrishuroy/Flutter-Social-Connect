@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:social_connect/models/user.dart';
+import 'package:social_connect/models/app_user.dart';
 import 'package:social_connect/pages/home.dart';
 
 class Search extends StatefulWidget {

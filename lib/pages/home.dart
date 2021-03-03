@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:social_connect/models/user.dart';
+import 'package:social_connect/models/app_user.dart';
 import 'package:social_connect/pages/activity_feed.dart';
 import 'package:social_connect/pages/create_account.dart';
 import 'package:social_connect/pages/profile.dart';
