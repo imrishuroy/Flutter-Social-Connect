@@ -31,7 +31,8 @@ dependencies:
   firebase_core: any
   firebase_messaging: any
   firebase_storage: ^7.0.0
-  flutter_svg: any
+  flutter_svg: ^0.19.3
+  geocoding: ^1.0.5
   geolocator: ^6.2.0
   google_sign_in: ^4.5.9
   image: ^2.1.19
@@ -39,7 +40,6 @@ dependencies:
   path_provider: ^1.6.27
   timeago: ^2.0.29
   uuid: ^2.2.2
-  geocoding: ^1.0.5
 
 dev_dependencies:
   flutter_test:

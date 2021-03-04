@@ -72,7 +72,7 @@ class _UploadState extends State<Upload> {
   selectImage(context) {
     return showDialog(
       context: context,
-      child: AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(
           'Pick an image',
           textAlign: TextAlign.center,

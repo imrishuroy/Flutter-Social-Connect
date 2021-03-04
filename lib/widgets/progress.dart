@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 Widget circularProgress() {
   return Container(
     // width is new added data
-    width: 100,
+    width: 60.0,
+    height: 60.0,
     alignment: Alignment.center,
     padding: EdgeInsets.only(top: 10.0),
     child: CircularProgressIndicator(

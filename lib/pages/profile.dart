@@ -7,6 +7,7 @@ import 'package:social_connect/pages/edit_profile.dart';
 import 'package:social_connect/pages/home.dart';
 import 'package:social_connect/widgets/header.dart';
 import 'package:social_connect/widgets/post.dart';
+import 'package:social_connect/widgets/post_tile.dart';
 
 class Profile extends StatefulWidget {
   final String profileId;
@@ -20,6 +21,7 @@ class _ProfileState extends State<Profile> {
   final String currentUserId = currentUser?.id;
   bool isLoading = false;
   int postCount = 0;
+  String postOrientation = 'grid';
   List<Post> posts = [];
   @override
   void initState() {
@@ -202,9 +204,64 @@ class _ProfileState extends State<Profile> {
   buidProfilePosts() {
     if (isLoading) {
       return CircularProgressIndicator();
+    } else if (postOrientation == 'grid') {
+      List<GridTile> gridTiles = [];
+      posts.forEach(
+        (post) {
+          gridTiles.add(
+            GridTile(
+              child: PostTile(
+                post: post,
+              ),
+            ),
+          );
+        },
+      );
+      return GridView.count(
+        crossAxisCount: 3,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 1.5,
+        crossAxisSpacing: 1.5,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: gridTiles,
+      );
+    } else if (postOrientation == 'list') {
+      return Column(
+        children: posts,
+      );
     }
-    return Column(
-      children: posts,
+  }
+
+  setPostOrientation(String postOrientation) {
+    setState(() {
+      this.postOrientation = postOrientation;
+    });
+  }
+
+  buildTogglePostOrientation() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        IconButton(
+          icon: Icon(
+            Icons.grid_on,
+            color: postOrientation == 'grid'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+          ),
+          onPressed: () => setPostOrientation('grid'),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.list,
+            color: postOrientation == 'list'
+                ? Theme.of(context).primaryColor
+                : Colors.grey,
+          ),
+          onPressed: () => setPostOrientation('list'),
+        ),
+      ],
     );
   }
 
@@ -218,9 +275,9 @@ class _ProfileState extends State<Profile> {
       body: ListView(
         children: [
           buildProfileHeader(),
-          Divider(
-            height: 0.0,
-          ),
+          Divider(),
+          buildTogglePostOrientation(),
+          Divider(height: 0.0),
           buidProfilePosts(),
         ],
       ),
