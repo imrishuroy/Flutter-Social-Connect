@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_connect/models/app_user.dart';
 import 'package:social_connect/pages/edit_profile.dart';
 import 'package:social_connect/pages/home.dart';
@@ -204,6 +205,29 @@ class _ProfileState extends State<Profile> {
   buidProfilePosts() {
     if (isLoading) {
       return CircularProgressIndicator();
+    } else if (posts.isEmpty) {
+      return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/images/no_content.svg',
+              height: 260.0,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: Text(
+                'No Posts',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     } else if (postOrientation == 'grid') {
       List<GridTile> gridTiles = [];
       posts.forEach(
